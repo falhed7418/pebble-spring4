@@ -22,6 +22,8 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class HasErrorsFunction extends BaseBindingResultFunction {
 
+    public static final String FUNCTION_NAME = "hasErrors";
+
     public HasErrorsFunction() {
         super(PARAM_FORM_NAME);
     }

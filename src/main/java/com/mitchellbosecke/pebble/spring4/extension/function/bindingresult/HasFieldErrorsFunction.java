@@ -22,6 +22,8 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class HasFieldErrorsFunction extends BaseBindingResultFunction {
 
+    public static final String FUNCTION_NAME = "hasFieldErrors";
+
     public HasFieldErrorsFunction() {
         super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
     }

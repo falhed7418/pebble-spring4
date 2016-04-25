@@ -30,6 +30,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ViewResolver;
 
 import com.mitchellbosecke.pebble.spring4.config.MVCConfig;
@@ -44,17 +46,19 @@ import com.mitchellbosecke.pebble.spring4.config.MVCConfig;
 @ContextConfiguration(classes = { MVCConfig.class })
 public class TestPebbleViewResolver {
 
+    private static final String CONTEXT_PATH = "/testContextPath";
+
     private static final Locale DEFAULT_LOCALE = Locale.CANADA;
+
+    private static final String EXPECTED_RESPONSE_PATH = "/com/mitchellbosecke/pebble/spring4/expectedResponse";
 
     private static final String FORM_NAME = "formName";
 
-    private static final String EXPECTED_RESPONSE_PATH = "/com/mitchellbosecke/pebble/spring4/expectedResponse";
+    private BindingResult bindingResult;
 
     private MockHttpServletRequest request;
 
     private MockHttpServletResponse response;
-
-    private BindingResult bindingResult;
 
     @Autowired
     private ViewResolver viewResolver;
@@ -73,6 +77,12 @@ public class TestPebbleViewResolver {
 
         String result = this.render("bindingResultTest", model);
         this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/bindingResultTest.html");
+    }
+
+    @Test
+    public void hrefFunctionTestOK() throws Exception {
+        String result = this.render("hrefFunctionTest", new HashMap<String, Object>());
+        this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/hrefFunctionTest.html");
     }
 
     @Test
@@ -101,11 +111,15 @@ public class TestPebbleViewResolver {
 
     @Before
     public void setUp() throws Exception {
+        // Mock request
         this.request = new MockHttpServletRequest();
-        this.request.setContextPath("testContextPath");
+        this.request.setContextPath(CONTEXT_PATH);
 
         this.request.getSession().setMaxInactiveInterval(600);
 
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
+
+        // Mock response
         this.response = new MockHttpServletResponse();
 
         // Binding result setup

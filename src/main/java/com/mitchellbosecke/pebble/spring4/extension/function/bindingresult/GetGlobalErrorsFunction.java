@@ -27,6 +27,8 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class GetGlobalErrorsFunction extends BaseBindingResultFunction {
 
+    public static final String FUNCTION_NAME = "getGlobalErrors";
+
     private final MessageSource messageSource;
 
     public GetGlobalErrorsFunction(MessageSource messageSource) {

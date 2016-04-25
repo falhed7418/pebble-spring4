@@ -14,6 +14,7 @@ import org.springframework.context.MessageSource;
 
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
 import com.mitchellbosecke.pebble.extension.Function;
+import com.mitchellbosecke.pebble.spring4.extension.function.HrefFunction;
 import com.mitchellbosecke.pebble.spring4.extension.function.MessageSourceFunction;
 import com.mitchellbosecke.pebble.spring4.extension.function.bindingresult.GetAllErrorsFunction;
 import com.mitchellbosecke.pebble.spring4.extension.function.bindingresult.GetFieldErrorsFunction;
@@ -37,13 +38,14 @@ public class SpringExtension extends AbstractExtension {
     @Override
     public Map<String, Function> getFunctions() {
         Map<String, Function> functions = new HashMap<String, Function>();
-        functions.put("message", new MessageSourceFunction(this.messageSource));
-        functions.put("hasErrors", new HasErrorsFunction());
-        functions.put("hasGlobalErrors", new HasGlobalErrorsFunction());
-        functions.put("hasFieldErrors", new HasFieldErrorsFunction());
-        functions.put("getAllErrors", new GetAllErrorsFunction(this.messageSource));
-        functions.put("getGlobalErrors", new GetGlobalErrorsFunction(this.messageSource));
-        functions.put("getFieldErrors", new GetFieldErrorsFunction(this.messageSource));
+        functions.put(MessageSourceFunction.FUNCTION_NAME, new MessageSourceFunction(this.messageSource));
+        functions.put(HasErrorsFunction.FUNCTION_NAME, new HasErrorsFunction());
+        functions.put(HasGlobalErrorsFunction.FUNCTION_NAME, new HasGlobalErrorsFunction());
+        functions.put(HasFieldErrorsFunction.FUNCTION_NAME, new HasFieldErrorsFunction());
+        functions.put(GetAllErrorsFunction.FUNCTION_NAME, new GetAllErrorsFunction(this.messageSource));
+        functions.put(GetGlobalErrorsFunction.FUNCTION_NAME, new GetGlobalErrorsFunction(this.messageSource));
+        functions.put(GetFieldErrorsFunction.FUNCTION_NAME, new GetFieldErrorsFunction(this.messageSource));
+        functions.put(HrefFunction.FUNCTION_NAME, new HrefFunction());
         return functions;
     }
 }

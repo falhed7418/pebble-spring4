@@ -27,6 +27,8 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class GetFieldErrorsFunction extends BaseBindingResultFunction {
 
+    public static final String FUNCTION_NAME = "getFieldErrors";
+
     private final MessageSource messageSource;
 
     public GetFieldErrorsFunction(MessageSource messageSource) {

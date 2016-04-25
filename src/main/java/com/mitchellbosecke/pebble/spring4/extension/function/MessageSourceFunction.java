@@ -26,6 +26,8 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class MessageSourceFunction implements Function {
 
+    public static final String FUNCTION_NAME = "message";
+
     private final MessageSource messageSource;
 
     public MessageSourceFunction(MessageSource messageSource) {
