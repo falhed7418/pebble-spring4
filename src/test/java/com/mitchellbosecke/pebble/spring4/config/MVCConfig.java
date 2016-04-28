@@ -29,7 +29,6 @@ import com.mitchellbosecke.pebble.spring4.extension.SpringExtension;
 public class MVCConfig {
 
     @Bean
-    @Qualifier("foo")
     public SomeBean foo() {
         return new SomeBean();
     }
