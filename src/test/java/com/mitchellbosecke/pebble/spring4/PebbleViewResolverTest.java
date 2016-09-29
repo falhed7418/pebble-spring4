@@ -7,6 +7,8 @@
 package com.mitchellbosecke.pebble.spring4;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,25 +46,60 @@ import com.mitchellbosecke.pebble.spring4.config.MVCConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { MVCConfig.class })
-public class TestPebbleViewResolver {
-
+public class PebbleViewResolverTest {
     private static final String CONTEXT_PATH = "/testContextPath";
-
     private static final Locale DEFAULT_LOCALE = Locale.CANADA;
-
     private static final String EXPECTED_RESPONSE_PATH = "/com/mitchellbosecke/pebble/spring4/expectedResponse";
-
     private static final String FORM_NAME = "formName";
 
-    private BindingResult bindingResult;
-
-    private MockHttpServletRequest request;
-
-    private MockHttpServletResponse response;
+    private BindingResult bindingResult = mock(BindingResult.class);
+    private MockHttpServletRequest request = new MockHttpServletRequest();
+    private MockHttpServletResponse response = new MockHttpServletResponse();;
 
     @Autowired
     private ViewResolver viewResolver;
+    
+    @Before
+    public void initRequest() {
+    	this.request.setContextPath(CONTEXT_PATH);
+        this.request.getSession().setMaxInactiveInterval(600);
 
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
+    }
+    
+    @Before
+    public void initBindingResult() {
+    	this.initBindingResultAllErrors();
+    	this.initBindingResultGlobalErrors();
+    	this.initBindingResultFieldErrors();
+    }
+    
+    private void initBindingResultAllErrors() {
+    	when(this.bindingResult.hasErrors()).thenReturn(true);
+    	
+    	List<ObjectError> allErrors = new ArrayList<>();
+        allErrors.add(new ObjectError(FORM_NAME, new String[] { "error.test" }, new String[] {}, "???error.test???"));
+    	when(this.bindingResult.getAllErrors()).thenReturn(allErrors);
+    }
+    
+    private void initBindingResultGlobalErrors() {
+    	 when(this.bindingResult.hasGlobalErrors()).thenReturn(true);
+    	 
+    	 List<ObjectError> globalErrors = new ArrayList<>();
+         globalErrors.add(new ObjectError(FORM_NAME, new String[] { "error.global.test.params" },
+                 new String[] { "param1", "param2" }, "???error.global.test.params???"));
+         when(this.bindingResult.getGlobalErrors()).thenReturn(globalErrors);
+    }
+    
+    private void initBindingResultFieldErrors() {
+    	when(this.bindingResult.hasFieldErrors("testField")).thenReturn(true);
+
+        List<FieldError> fieldErrors = new ArrayList<>();
+        fieldErrors.add(new FieldError(FORM_NAME, "testField", null, false, new String[] { "error.field.test.params" },
+                new String[] { "param1", "param2" }, "???error.field.test.params???"));
+        when(this.bindingResult.getFieldErrors("testField")).thenReturn(fieldErrors);
+    }
+    
     @Test
     public void beansTestOK() throws Exception {
         String result = this.render("beansTest", new HashMap<String, Object>());
@@ -107,41 +144,6 @@ public class TestPebbleViewResolver {
     public void sessionTestOK() throws Exception {
         String result = this.render("sessionTest", new HashMap<String, Object>());
         this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/sessionTest.html");
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        // Mock request
-        this.request = new MockHttpServletRequest();
-        this.request.setContextPath(CONTEXT_PATH);
-
-        this.request.getSession().setMaxInactiveInterval(600);
-
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
-
-        // Mock response
-        this.response = new MockHttpServletResponse();
-
-        // Binding result setup
-        this.bindingResult = Mockito.mock(BindingResult.class);
-        Mockito.when(this.bindingResult.hasErrors()).thenReturn(true);
-        Mockito.when(this.bindingResult.hasGlobalErrors()).thenReturn(true);
-        Mockito.when(this.bindingResult.hasFieldErrors("testField")).thenReturn(true);
-
-        List<ObjectError> allErrors = new ArrayList<>();
-        allErrors.add(new ObjectError(FORM_NAME, new String[] { "error.test" }, new String[] {}, "???error.test???"));
-
-        List<ObjectError> globalErrors = new ArrayList<>();
-        globalErrors.add(new ObjectError(FORM_NAME, new String[] { "error.global.test.params" },
-                new String[] { "param1", "param2" }, "???error.global.test.params???"));
-
-        List<FieldError> fieldErrors = new ArrayList<>();
-        fieldErrors.add(new FieldError(FORM_NAME, "testField", null, false, new String[] { "error.field.test.params" },
-                new String[] { "param1", "param2" }, "???error.field.test.params???"));
-
-        Mockito.when(this.bindingResult.getAllErrors()).thenReturn(allErrors);
-        Mockito.when(this.bindingResult.getGlobalErrors()).thenReturn(globalErrors);
-        Mockito.when(this.bindingResult.getFieldErrors("testField")).thenReturn(fieldErrors);
     }
 
     private void assertOutput(String output, String expectedOutput) throws IOException {
