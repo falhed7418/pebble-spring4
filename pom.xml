@@ -21,7 +21,7 @@
 		<javasource>1.7</javasource>
 		<javatarget>1.7</javatarget>
 		
-		<pebble.version>2.2.3</pebble.version>
+		<pebble.version>2.3.0</pebble.version>
 		<servlet-api.version>3.0.1</servlet-api.version>
 		<spring-framework.version>4.1.0.RELEASE</spring-framework.version>
 		<junit.version>4.12</junit.version>
