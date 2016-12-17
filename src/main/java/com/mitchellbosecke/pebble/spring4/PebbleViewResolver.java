@@ -6,54 +6,54 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4;
 
+import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.loader.Loader;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.view.AbstractTemplateViewResolver;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import com.mitchellbosecke.pebble.loader.Loader;
-
 public class PebbleViewResolver extends AbstractTemplateViewResolver implements InitializingBean {
 
-    private String characterEncoding = "UTF-8";
+  private String characterEncoding = "UTF-8";
 
-    private PebbleEngine pebbleEngine;
+  private PebbleEngine pebbleEngine;
 
-    private Loader<?> templateLoader;
+  private Loader<?> templateLoader;
 
-    public PebbleViewResolver() {
-        this.setViewClass(this.requiredViewClass());
-    }
+  public PebbleViewResolver() {
+    this.setViewClass(this.requiredViewClass());
+  }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        this.templateLoader = this.pebbleEngine.getLoader();
-        this.templateLoader.setPrefix(this.getPrefix());
-        this.templateLoader.setSuffix(this.getSuffix());
-    }
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    this.templateLoader = this.pebbleEngine.getLoader();
+    this.templateLoader.setPrefix(this.getPrefix());
+    this.templateLoader.setSuffix(this.getSuffix());
+  }
 
-    public void setCharacterEncoding(String characterEncoding) {
-        this.characterEncoding = characterEncoding;
-    }
+  public void setCharacterEncoding(String characterEncoding) {
+    this.characterEncoding = characterEncoding;
+  }
 
-    @Required
-    public void setPebbleEngine(PebbleEngine pebbleEngine) {
-        this.pebbleEngine = pebbleEngine;
-    }
+  @Required
+  public void setPebbleEngine(PebbleEngine pebbleEngine) {
+    this.pebbleEngine = pebbleEngine;
+  }
 
-    @Override
-    protected AbstractUrlBasedView buildView(String viewName) throws Exception {
-        PebbleView view = (PebbleView) super.buildView(viewName);
-        view.setTemplateName(viewName);
-        view.setPebbleEngine(this.pebbleEngine);
-        view.setCharacterEncoding(this.characterEncoding);
+  @Override
+  protected AbstractUrlBasedView buildView(String viewName) throws Exception {
+    PebbleView view = (PebbleView) super.buildView(viewName);
+    view.setTemplateName(viewName);
+    view.setPebbleEngine(this.pebbleEngine);
+    view.setCharacterEncoding(this.characterEncoding);
 
-        return view;
-    }
+    return view;
+  }
 
-    @Override
-    protected Class<?> requiredViewClass() {
-        return PebbleView.class;
-    }
+  @Override
+  protected Class<?> requiredViewClass() {
+    return PebbleView.class;
+  }
 }

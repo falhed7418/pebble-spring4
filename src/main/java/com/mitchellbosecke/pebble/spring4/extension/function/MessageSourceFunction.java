@@ -6,15 +6,15 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function;
 
+import com.mitchellbosecke.pebble.extension.Function;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
+
+import org.springframework.context.MessageSource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import org.springframework.context.MessageSource;
-
-import com.mitchellbosecke.pebble.extension.Function;
-import com.mitchellbosecke.pebble.template.EvaluationContext;
 
 /**
  * <p>
@@ -26,38 +26,38 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class MessageSourceFunction implements Function {
 
-    public static final String FUNCTION_NAME = "message";
+  public static final String FUNCTION_NAME = "message";
 
-    private final MessageSource messageSource;
+  private final MessageSource messageSource;
 
-    public MessageSourceFunction(MessageSource messageSource) {
-        if (messageSource == null) {
-            throw new IllegalArgumentException("In order to use the message function, a bean of type "
-                    + MessageSource.class.getName() + " must be configured");
-        }
-        this.messageSource = messageSource;
+  public MessageSourceFunction(MessageSource messageSource) {
+    if (messageSource == null) {
+      throw new IllegalArgumentException("In order to use the message function, a bean of type "
+          + MessageSource.class.getName() + " must be configured");
+    }
+    this.messageSource = messageSource;
+  }
+
+  @Override
+  public Object execute(Map<String, Object> args) {
+    String key = (String) args.get("0");
+
+    int i = 1;
+    List<Object> arguments = new ArrayList<>();
+    while (args.containsKey(String.valueOf(i))) {
+      Object param = args.get(String.valueOf(i));
+      arguments.add(param);
+      i++;
     }
 
-    @Override
-    public Object execute(Map<String, Object> args) {
-        String key = (String) args.get("0");
+    EvaluationContext context = (EvaluationContext) args.get("_context");
+    Locale locale = context.getLocale();
 
-        int i = 1;
-        List<Object> arguments = new ArrayList<>();
-        while (args.containsKey(String.valueOf(i))) {
-            Object param = args.get(String.valueOf(i));
-            arguments.add(param);
-            i++;
-        }
+    return this.messageSource.getMessage(key, arguments.toArray(), "???" + key + "???", locale);
+  }
 
-        EvaluationContext context = (EvaluationContext) args.get("_context");
-        Locale locale = context.getLocale();
-
-        return this.messageSource.getMessage(key, arguments.toArray(), "???" + key + "???", locale);
-    }
-
-    @Override
-    public List<String> getArgumentNames() {
-        return null;
-    }
+  @Override
+  public List<String> getArgumentNames() {
+    return null;
+  }
 }

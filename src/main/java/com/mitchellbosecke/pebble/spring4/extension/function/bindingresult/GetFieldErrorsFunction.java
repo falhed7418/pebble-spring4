@@ -6,16 +6,16 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function.bindingresult;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
 
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.mitchellbosecke.pebble.template.EvaluationContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,42 +27,42 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class GetFieldErrorsFunction extends BaseBindingResultFunction {
 
-    public static final String FUNCTION_NAME = "getFieldErrors";
+  public static final String FUNCTION_NAME = "getFieldErrors";
 
-    private final MessageSource messageSource;
+  private final MessageSource messageSource;
 
-    public GetFieldErrorsFunction(MessageSource messageSource) {
-        super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
-        if (messageSource == null) {
-            throw new IllegalArgumentException("In order to use the GetErrorsFunction, a bean of type "
-                    + MessageSource.class.getName() + " must be configured");
-        }
-        this.messageSource = messageSource;
+  public GetFieldErrorsFunction(MessageSource messageSource) {
+    super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
+    if (messageSource == null) {
+      throw new IllegalArgumentException("In order to use the GetErrorsFunction, a bean of type "
+          + MessageSource.class.getName() + " must be configured");
+    }
+    this.messageSource = messageSource;
+  }
+
+  @Override
+  public Object execute(Map<String, Object> args) {
+    List<String> results = new ArrayList<>();
+    String formName = (String) args.get(PARAM_FORM_NAME);
+    String field = (String) args.get(PARAM_FIELD_NAME);
+
+    if (field == null) {
+      throw new IllegalArgumentException("Field parameter is required in GetFieldErrorsFunction");
     }
 
-    @Override
-    public Object execute(Map<String, Object> args) {
-        List<String> results = new ArrayList<>();
-        String formName = (String) args.get(PARAM_FORM_NAME);
-        String field = (String) args.get(PARAM_FIELD_NAME);
+    EvaluationContext context = (EvaluationContext) args.get("_context");
+    Locale locale = context.getLocale();
+    BindingResult bindingResult = this.getBindingResult(formName, context);
 
-        if (field == null) {
-            throw new IllegalArgumentException("Field parameter is required in GetFieldErrorsFunction");
+    if (bindingResult != null) {
+      for (FieldError error : bindingResult.getFieldErrors(field)) {
+        String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
+            error.getDefaultMessage(), locale);
+        if (msg != null) {
+          results.add(msg);
         }
-
-        EvaluationContext context = (EvaluationContext) args.get("_context");
-        Locale locale = context.getLocale();
-        BindingResult bindingResult = this.getBindingResult(formName, context);
-
-        if (bindingResult != null) {
-            for (FieldError error : bindingResult.getFieldErrors(field)) {
-                String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
-                        error.getDefaultMessage(), locale);
-                if (msg != null) {
-                    results.add(msg);
-                }
-            }
-        }
-        return results;
+      }
     }
+    return results;
+  }
 }

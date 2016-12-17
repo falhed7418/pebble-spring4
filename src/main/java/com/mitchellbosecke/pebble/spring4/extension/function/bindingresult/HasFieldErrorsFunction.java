@@ -6,11 +6,11 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function.bindingresult;
 
-import java.util.Map;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
 
 import org.springframework.validation.BindingResult;
 
-import com.mitchellbosecke.pebble.template.EvaluationContext;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,28 +22,28 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class HasFieldErrorsFunction extends BaseBindingResultFunction {
 
-    public static final String FUNCTION_NAME = "hasFieldErrors";
+  public static final String FUNCTION_NAME = "hasFieldErrors";
 
-    public HasFieldErrorsFunction() {
-        super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
+  public HasFieldErrorsFunction() {
+    super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
+  }
+
+  @Override
+  public Object execute(Map<String, Object> args) {
+    String formName = (String) args.get(PARAM_FORM_NAME);
+    String fieldName = (String) args.get(PARAM_FIELD_NAME);
+
+    EvaluationContext context = (EvaluationContext) args.get("_context");
+    BindingResult bindingResult = this.getBindingResult(formName, context);
+
+    if (bindingResult != null) {
+      if (fieldName == null) {
+        return bindingResult.hasFieldErrors();
+      } else {
+        return bindingResult.hasFieldErrors(fieldName);
+      }
+    } else {
+      return false;
     }
-
-    @Override
-    public Object execute(Map<String, Object> args) {
-        String formName = (String) args.get(PARAM_FORM_NAME);
-        String fieldName = (String) args.get(PARAM_FIELD_NAME);
-
-        EvaluationContext context = (EvaluationContext) args.get("_context");
-        BindingResult bindingResult = this.getBindingResult(formName, context);
-
-        if (bindingResult != null) {
-            if (fieldName == null) {
-                return bindingResult.hasFieldErrors();
-            } else {
-                return bindingResult.hasFieldErrors(fieldName);
-            }
-        } else {
-            return false;
-        }
-    }
+  }
 }

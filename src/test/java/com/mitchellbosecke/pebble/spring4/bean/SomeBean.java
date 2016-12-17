@@ -13,7 +13,7 @@ package com.mitchellbosecke.pebble.spring4.bean;
  */
 public class SomeBean {
 
-    public String foo() {
-        return "foo";
-    }
+  public String foo() {
+    return "foo";
+  }
 }

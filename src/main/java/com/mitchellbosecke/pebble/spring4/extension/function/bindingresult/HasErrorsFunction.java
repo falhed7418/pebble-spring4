@@ -6,11 +6,11 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function.bindingresult;
 
-import java.util.Map;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
 
 import org.springframework.validation.BindingResult;
 
-import com.mitchellbosecke.pebble.template.EvaluationContext;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,22 +22,18 @@ import com.mitchellbosecke.pebble.template.EvaluationContext;
  */
 public class HasErrorsFunction extends BaseBindingResultFunction {
 
-    public static final String FUNCTION_NAME = "hasErrors";
+  public static final String FUNCTION_NAME = "hasErrors";
 
-    public HasErrorsFunction() {
-        super(PARAM_FORM_NAME);
-    }
+  public HasErrorsFunction() {
+    super(PARAM_FORM_NAME);
+  }
 
-    @Override
-    public Object execute(Map<String, Object> args) {
-        String formName = (String) args.get(PARAM_FORM_NAME);
+  @Override
+  public Object execute(Map<String, Object> args) {
+    String formName = (String) args.get(PARAM_FORM_NAME);
 
-        EvaluationContext context = (EvaluationContext) args.get("_context");
-        BindingResult bindingResult = this.getBindingResult(formName, context);
-        if (bindingResult != null) {
-            return bindingResult.hasErrors();
-        } else {
-            return false;
-        }
-    }
+    EvaluationContext context = (EvaluationContext) args.get("_context");
+    BindingResult bindingResult = this.getBindingResult(formName, context);
+    return bindingResult != null && bindingResult.hasErrors();
+  }
 }
