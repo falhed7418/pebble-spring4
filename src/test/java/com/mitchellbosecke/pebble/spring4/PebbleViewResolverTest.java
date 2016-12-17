@@ -51,19 +51,19 @@ public class PebbleViewResolverTest {
   private static final String EXPECTED_RESPONSE_PATH = "/com/mitchellbosecke/pebble/spring4/expectedResponse";
   private static final String FORM_NAME = "formName";
 
-  private BindingResult bindingResult = mock(BindingResult.class);
-  private MockHttpServletRequest request = new MockHttpServletRequest();
-  private MockHttpServletResponse response = new MockHttpServletResponse();
+  private BindingResult mockBindingResult = mock(BindingResult.class);
+  private MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+  private MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
   @Autowired
   private ViewResolver viewResolver;
 
   @Before
   public void initRequest() {
-    this.request.setContextPath(CONTEXT_PATH);
-    this.request.getSession().setMaxInactiveInterval(600);
+    this.mockRequest.setContextPath(CONTEXT_PATH);
+    this.mockRequest.getSession().setMaxInactiveInterval(600);
 
-    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.request));
+    RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(this.mockRequest));
   }
 
   @Before
@@ -74,74 +74,85 @@ public class PebbleViewResolverTest {
   }
 
   private void initBindingResultAllErrors() {
-    when(this.bindingResult.hasErrors()).thenReturn(true);
+    when(this.mockBindingResult.hasErrors()).thenReturn(true);
 
     List<ObjectError> allErrors = new ArrayList<>();
     allErrors.add(new ObjectError(FORM_NAME, new String[]{"error.test"}, new String[]{}, "???error.test???"));
-    when(this.bindingResult.getAllErrors()).thenReturn(allErrors);
+    when(this.mockBindingResult.getAllErrors()).thenReturn(allErrors);
   }
 
   private void initBindingResultGlobalErrors() {
-    when(this.bindingResult.hasGlobalErrors()).thenReturn(true);
+    when(this.mockBindingResult.hasGlobalErrors()).thenReturn(true);
 
     List<ObjectError> globalErrors = new ArrayList<>();
     globalErrors.add(new ObjectError(FORM_NAME, new String[]{"error.global.test.params"},
-        new String[]{"param1", "param2"}, "???error.global.test.params???"));
-    when(this.bindingResult.getGlobalErrors()).thenReturn(globalErrors);
+            new String[]{"param1", "param2"}, "???error.global.test.params???"));
+    when(this.mockBindingResult.getGlobalErrors()).thenReturn(globalErrors);
   }
 
   private void initBindingResultFieldErrors() {
-    when(this.bindingResult.hasFieldErrors("testField")).thenReturn(true);
+    when(this.mockBindingResult.hasFieldErrors("testField")).thenReturn(true);
 
     List<FieldError> fieldErrors = new ArrayList<>();
     fieldErrors.add(new FieldError(FORM_NAME, "testField", null, false, new String[]{"error.field.test.params"},
-        new String[]{"param1", "param2"}, "???error.field.test.params???"));
-    when(this.bindingResult.getFieldErrors("testField")).thenReturn(fieldErrors);
+            new String[]{"param1", "param2"}, "???error.field.test.params???"));
+    when(this.mockBindingResult.getFieldErrors("testField")).thenReturn(fieldErrors);
   }
 
   @Test
-  public void beansTestOK() throws Exception {
+  public void whenRenderingAPage_givenPageWithBeanVariable_thenRenderingIsOK() throws Exception {
     String result = this.render("beansTest", new HashMap<String, Object>());
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/beansTest.html");
   }
 
   @Test
-  public void bindingResultTestOK() throws Exception {
-    Map<String, Object> model = new HashMap<>();
-
-    model.put(BindingResult.MODEL_KEY_PREFIX + FORM_NAME, this.bindingResult);
+  public void whenRenderingAPage_givenPageWithBindingResult_thenRenderingIsOK() throws Exception {
+    Map<String, Object> model = givenBindingResult();
 
     String result = this.render("bindingResultTest", model);
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/bindingResultTest.html");
   }
 
+  private Map<String, Object> givenBindingResult() {
+    Map<String, Object> model = new HashMap<>();
+    model.put(BindingResult.MODEL_KEY_PREFIX + FORM_NAME, this.mockBindingResult);
+    return model;
+  }
+
   @Test
-  public void hrefFunctionTestOK() throws Exception {
+  public void whenRenderingAPage_givenPageWithHrefFunction_thenRenderingIsOK() throws Exception {
     String result = this.render("hrefFunctionTest", new HashMap<String, Object>());
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/hrefFunctionTest.html");
   }
 
   @Test
-  public void messageTestOK() throws Exception {
+  public void whenRenderingAPage_givenPageWithResourceBundleMessage_thenRenderingIsOK() throws Exception {
     String result = this.render("messageTest", new HashMap<String, Object>());
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/messageTest.html");
   }
 
   @Test
-  public void requestTestOK() throws Exception {
+  public void whenRenderingAPage_givenPageWithHttpRequestVariable_thenRenderingIsOK() throws Exception {
     String result = this.render("requestTest", new HashMap<String, Object>());
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/requestTest.html");
   }
 
   @Test
-  public void responseTestOK() throws Exception {
+  public void whenRenderingAPage_givenPageWithHttpResponseVariable_thenRenderingIsOK() throws Exception {
     String result = this.render("responseTest", new HashMap<String, Object>());
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/responseTest.html");
   }
 
   @Test
-  public void sessionTestOK() throws Exception {
+  public void whenRenderingAPage_givenPageWithHttpSessionVariable_thenRenderingIsOK() throws Exception {
     String result = this.render("sessionTest", new HashMap<String, Object>());
+
     this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/sessionTest.html");
   }
 
@@ -152,7 +163,7 @@ public class PebbleViewResolverTest {
   private String readExpectedOutputResource(String expectedOutput) throws IOException {
     StringBuilder builder = new StringBuilder();
     try (BufferedReader in = new BufferedReader(
-        new InputStreamReader(this.getClass().getResourceAsStream(expectedOutput)))) {
+            new InputStreamReader(this.getClass().getResourceAsStream(expectedOutput)))) {
       for (; ; ) {
         String line = in.readLine();
         if (line == null) {
@@ -166,7 +177,7 @@ public class PebbleViewResolverTest {
   }
 
   private String render(String location, Map<String, ?> model) throws Exception {
-    this.viewResolver.resolveViewName(location, DEFAULT_LOCALE).render(model, this.request, this.response);
-    return this.response.getContentAsString();
+    this.viewResolver.resolveViewName(location, DEFAULT_LOCALE).render(model, this.mockRequest, this.mockResponse);
+    return this.mockResponse.getContentAsString();
   }
 }

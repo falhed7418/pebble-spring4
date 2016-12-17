@@ -35,7 +35,7 @@ public class GetAllErrorsFunction extends BaseBindingResultFunction {
     super(PARAM_FORM_NAME);
     if (messageSource == null) {
       throw new IllegalArgumentException("In order to use the GetErrorsFunction, a bean of type "
-          + MessageSource.class.getName() + " must be configured");
+              + MessageSource.class.getName() + " must be configured");
     }
     this.messageSource = messageSource;
   }
@@ -52,7 +52,7 @@ public class GetAllErrorsFunction extends BaseBindingResultFunction {
     if (bindingResult != null) {
       for (ObjectError error : bindingResult.getAllErrors()) {
         String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
-            error.getDefaultMessage(), locale);
+                error.getDefaultMessage(), locale);
         if (msg != null) {
           results.add(msg);
         }
