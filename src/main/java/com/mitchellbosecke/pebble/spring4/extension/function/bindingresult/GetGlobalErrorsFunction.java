@@ -45,15 +45,18 @@ public class GetGlobalErrorsFunction extends BaseBindingResultFunction {
     Locale locale = context.getLocale();
     BindingResult bindingResult = this.getBindingResult(formName, context);
 
+    return constructErrorMessages(locale, bindingResult);
+  }
+
+  private List<String> constructErrorMessages(Locale locale, BindingResult bindingResult) {
+    List<String> errorMessages = new ArrayList<>();
     if (bindingResult != null) {
       for (ObjectError error : bindingResult.getGlobalErrors()) {
         String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
-            error.getDefaultMessage(), locale);
-        if (msg != null) {
-          results.add(msg);
-        }
+                error.getDefaultMessage(), locale);
+        errorMessages.add(msg);
       }
     }
-    return results;
+    return errorMessages;
   }
 }

@@ -36,8 +36,23 @@ public class MessageSourceFunction implements Function {
 
   @Override
   public Object execute(Map<String, Object> args) {
-    String key = (String) args.get("0");
+    String key = extractKey(args);
+    List<Object> arguments = extractArguments(args);
+    Locale locale = extractLocale(args);
 
+    return this.messageSource.getMessage(key, arguments.toArray(), "???" + key + "???", locale);
+  }
+
+  private Locale extractLocale(Map<String, Object> args) {
+    EvaluationContext context = (EvaluationContext) args.get("_context");
+    return context.getLocale();
+  }
+
+  private String extractKey(Map<String, Object> args) {
+    return (String) args.get("0");
+  }
+
+  private List<Object> extractArguments(Map<String, Object> args) {
     int i = 1;
     List<Object> arguments = new ArrayList<>();
     while (args.containsKey(String.valueOf(i))) {
@@ -45,11 +60,7 @@ public class MessageSourceFunction implements Function {
       arguments.add(param);
       i++;
     }
-
-    EvaluationContext context = (EvaluationContext) args.get("_context");
-    Locale locale = context.getLocale();
-
-    return this.messageSource.getMessage(key, arguments.toArray(), "???" + key + "???", locale);
+    return arguments;
   }
 
   @Override

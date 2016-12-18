@@ -23,7 +23,6 @@ import java.util.List;
 public abstract class BaseBindingResultFunction implements Function {
 
   protected static final String PARAM_FIELD_NAME = "fieldName";
-
   protected static final String PARAM_FORM_NAME = "formName";
 
   private final List<String> argumentNames = new ArrayList<>();

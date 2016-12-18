@@ -38,22 +38,24 @@ public class GetAllErrorsFunction extends BaseBindingResultFunction {
 
   @Override
   public Object execute(Map<String, Object> args) {
-    List<String> results = new ArrayList<>();
     String formName = (String) args.get(PARAM_FORM_NAME);
 
     EvaluationContext context = (EvaluationContext) args.get("_context");
     Locale locale = context.getLocale();
     BindingResult bindingResult = this.getBindingResult(formName, context);
 
+    return constructErrorMessage(locale, bindingResult);
+  }
+
+  private List<String> constructErrorMessage(Locale locale, BindingResult bindingResult) {
+    List<String> errorMessages = new ArrayList<>();
     if (bindingResult != null) {
       for (ObjectError error : bindingResult.getAllErrors()) {
         String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
                 error.getDefaultMessage(), locale);
-        if (msg != null) {
-          results.add(msg);
-        }
+        errorMessages.add(msg);
       }
     }
-    return results;
+    return errorMessages;
   }
 }

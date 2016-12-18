@@ -21,7 +21,6 @@ public class HrefFunction implements Function {
   protected static final String PARAM_URL = "url";
 
   protected List<String> argumentNames;
-
   private String contextPath;
 
   /**
@@ -41,19 +40,25 @@ public class HrefFunction implements Function {
   public Object execute(Map<String, Object> args) {
     StringBuffer result = new StringBuffer();
 
-    // Add context path
-    if (this.contextPath == null) {
-      this.contextPath = ViewUtils.getRequest().getContextPath();
-    }
-    result.append(this.contextPath);
+    result.append(getContextPath());
+    addUrlParameter(args, result);
 
-    // Add url parameter
+    return result.toString();
+  }
+
+  private void addUrlParameter(Map<String, Object> args, StringBuffer result) {
     String url = (String) args.get(PARAM_URL);
     if (StringUtils.hasText(url)) {
       result.append(url);
     }
+  }
 
-    return result.toString();
+  private String getContextPath() {
+    if (this.contextPath == null) {
+      this.contextPath = ViewUtils.getRequest().getContextPath();
+    }
+
+    return this.contextPath;
   }
 
   /**
