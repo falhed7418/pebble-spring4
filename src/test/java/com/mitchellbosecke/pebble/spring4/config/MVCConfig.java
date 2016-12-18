@@ -42,8 +42,11 @@ public class MVCConfig {
 
   @Bean
   public PebbleEngine pebbleEngine() {
-    return new PebbleEngine.Builder().loader(this.templateLoader()).strictVariables(false)
-        .extension(this.springExtension()).build();
+    return new PebbleEngine.Builder()
+            .loader(this.templateLoader())
+            .strictVariables(false)
+            .extension(this.springExtension())
+            .build();
   }
 
   @Bean

@@ -20,17 +20,15 @@ public class PebbleViewResolver extends AbstractTemplateViewResolver implements 
 
   private PebbleEngine pebbleEngine;
 
-  private Loader<?> templateLoader;
-
   public PebbleViewResolver() {
     this.setViewClass(this.requiredViewClass());
   }
 
   @Override
   public void afterPropertiesSet() throws Exception {
-    this.templateLoader = this.pebbleEngine.getLoader();
-    this.templateLoader.setPrefix(this.getPrefix());
-    this.templateLoader.setSuffix(this.getSuffix());
+    Loader<?> templateLoader = this.pebbleEngine.getLoader();
+    templateLoader.setPrefix(this.getPrefix());
+    templateLoader.setSuffix(this.getSuffix());
   }
 
   public void setCharacterEncoding(String characterEncoding) {

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 public class ViewUtils {
 
   /**
-   * Desactivate constructor
+   * Deactivate constructor
    */
   private ViewUtils() {
   }

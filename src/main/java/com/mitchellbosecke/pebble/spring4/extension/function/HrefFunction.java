@@ -25,7 +25,7 @@ public class HrefFunction implements Function {
   private String contextPath;
 
   /**
-   * Constructeur
+   * Constructor
    */
   public HrefFunction() {
     this.argumentNames = new ArrayList<>();
