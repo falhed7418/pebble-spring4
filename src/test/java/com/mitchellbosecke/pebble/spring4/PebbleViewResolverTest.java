@@ -161,19 +161,18 @@ public class PebbleViewResolverTest {
   }
 
   private String readExpectedOutputResource(String expectedOutput) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(expectedOutput)));
+
     StringBuilder builder = new StringBuilder();
-    try (BufferedReader in = new BufferedReader(
-            new InputStreamReader(this.getClass().getResourceAsStream(expectedOutput)))) {
-      for (; ; ) {
-        String line = in.readLine();
-        if (line == null) {
-          break;
-        }
-        builder.append(line);
-      }
+    for (String currentLine = reader.readLine(); currentLine != null; currentLine = reader.readLine()) {
+      builder.append(currentLine);
     }
-    // Remove all whitespaces
-    return builder.toString().replaceAll("\\s", "");
+
+    return removeAllWhitespaces(builder.toString());
+  }
+
+  private String removeAllWhitespaces(String source) {
+    return source.replaceAll("\\s", "");
   }
 
   private String render(String location, Map<String, ?> model) throws Exception {
