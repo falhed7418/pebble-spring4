@@ -31,10 +31,6 @@ public class MessageSourceFunction implements Function {
   private final MessageSource messageSource;
 
   public MessageSourceFunction(MessageSource messageSource) {
-    if (messageSource == null) {
-      throw new IllegalArgumentException("In order to use the message function, a bean of type "
-          + MessageSource.class.getName() + " must be configured");
-    }
     this.messageSource = messageSource;
   }
 

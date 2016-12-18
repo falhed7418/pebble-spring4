@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class SpringExtension extends AbstractExtension {
 
-  @Autowired(required = false)
+  @Autowired
   private MessageSource messageSource;
 
   @Override

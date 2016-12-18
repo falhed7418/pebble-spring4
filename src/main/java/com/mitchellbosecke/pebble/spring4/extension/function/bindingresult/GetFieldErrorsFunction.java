@@ -33,10 +33,6 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
 
   public GetFieldErrorsFunction(MessageSource messageSource) {
     super(PARAM_FORM_NAME, PARAM_FIELD_NAME);
-    if (messageSource == null) {
-      throw new IllegalArgumentException("In order to use the GetErrorsFunction, a bean of type "
-              + MessageSource.class.getName() + " must be configured");
-    }
     this.messageSource = messageSource;
   }
 
