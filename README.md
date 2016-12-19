@@ -1,4 +1,4 @@
-# pebble-spring4
+# pebble-spring4 [![Build Status](https://travis-ci.org/PebbleTemplates/pebble-spring4.svg?branch=master)](https://travis-ci.org/PebbleTemplates/pebble-spring4)
 Official Pebble Spring 4.x Extension
 
 ## Installation

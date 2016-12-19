@@ -16,8 +16,7 @@ import org.springframework.web.servlet.view.AbstractUrlBasedView;
 
 public class PebbleViewResolver extends AbstractTemplateViewResolver implements InitializingBean {
 
-  private String characterEncoding = "UTF-8";
-
+  private String characterEncoding;
   private PebbleEngine pebbleEngine;
 
   public PebbleViewResolver() {

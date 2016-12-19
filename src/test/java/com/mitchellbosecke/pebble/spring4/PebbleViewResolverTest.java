@@ -129,10 +129,19 @@ public class PebbleViewResolverTest {
   }
 
   @Test
-  public void whenRenderingAPage_givenPageWithResourceBundleMessage_thenRenderingIsOK() throws Exception {
-    String result = this.render("messageTest", new HashMap<String, Object>());
+  public void whenRenderingAPageInEnglish_givenPageWithResourceBundleMessage_thenRenderingIsOK() throws Exception {
+    String result = this.render("messageEnTest", new HashMap<String, Object>());
 
-    this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/messageTest.html");
+    this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/messageEnTest.html");
+  }
+
+  @Test
+  public void whenRenderingAPageInFrench_givenPageWithResourceBundleMessage_thenRenderingIsOK() throws Exception {
+    this.mockRequest.addPreferredLocale(Locale.CANADA_FRENCH);
+
+    String result = this.render("messageFrTest", new HashMap<String, Object>());
+
+    this.assertOutput(result, EXPECTED_RESPONSE_PATH + "/messageFrTest.html");
   }
 
   @Test
