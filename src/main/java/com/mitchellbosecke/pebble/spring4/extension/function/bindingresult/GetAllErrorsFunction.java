@@ -44,7 +44,7 @@ public class GetAllErrorsFunction extends BaseBindingResultFunction {
     Locale locale = context.getLocale();
     BindingResult bindingResult = this.getBindingResult(formName, context);
 
-    return constructErrorMessage(locale, bindingResult);
+    return this.constructErrorMessage(locale, bindingResult);
   }
 
   private List<String> constructErrorMessage(Locale locale, BindingResult bindingResult) {

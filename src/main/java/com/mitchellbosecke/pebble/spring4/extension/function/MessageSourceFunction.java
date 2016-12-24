@@ -36,9 +36,9 @@ public class MessageSourceFunction implements Function {
 
   @Override
   public Object execute(Map<String, Object> args) {
-    String key = extractKey(args);
-    List<Object> arguments = extractArguments(args);
-    Locale locale = extractLocale(args);
+    String key = this.extractKey(args);
+    List<Object> arguments = this.extractArguments(args);
+    Locale locale = this.extractLocale(args);
 
     return this.messageSource.getMessage(key, arguments.toArray(), "???" + key + "???", locale);
   }

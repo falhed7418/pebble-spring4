@@ -40,8 +40,8 @@ public class HrefFunction implements Function {
   public Object execute(Map<String, Object> args) {
     StringBuffer result = new StringBuffer();
 
-    result.append(getContextPath());
-    addUrlParameter(args, result);
+    result.append(this.getContextPath());
+    this.addUrlParameter(args, result);
 
     return result.toString();
   }

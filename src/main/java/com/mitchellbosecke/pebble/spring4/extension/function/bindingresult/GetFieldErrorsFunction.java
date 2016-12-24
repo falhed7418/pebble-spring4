@@ -49,7 +49,7 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
     Locale locale = context.getLocale();
     BindingResult bindingResult = this.getBindingResult(formName, context);
 
-    return constructErrorMessages(field, locale, bindingResult);
+    return this.constructErrorMessages(field, locale, bindingResult);
   }
 
   private List<String> constructErrorMessages(String field, Locale locale, BindingResult bindingResult) {

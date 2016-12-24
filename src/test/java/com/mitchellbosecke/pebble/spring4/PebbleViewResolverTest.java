@@ -108,7 +108,7 @@ public class PebbleViewResolverTest {
 
   @Test
   public void whenRenderingAPage_givenPageWithBindingResult_thenRenderingIsOK() throws Exception {
-    Map<String, Object> model = givenBindingResult();
+    Map<String, Object> model = this.givenBindingResult();
 
     String result = this.render("bindingResultTest", model);
 
@@ -177,7 +177,7 @@ public class PebbleViewResolverTest {
       builder.append(currentLine);
     }
 
-    return removeAllWhitespaces(builder.toString());
+    return this.removeAllWhitespaces(builder.toString());
   }
 
   private String removeAllWhitespaces(String source) {
