@@ -41,11 +41,11 @@ public class MVCConfig {
   }
 
   @Bean
-  public PebbleEngine pebbleEngine() {
+  public PebbleEngine pebbleEngine(SpringExtension springExtension) {
     return new PebbleEngine.Builder()
             .loader(this.templateLoader())
             .strictVariables(false)
-            .extension(this.springExtension())
+            .extension(springExtension)
             .build();
   }
 
@@ -60,11 +60,11 @@ public class MVCConfig {
   }
 
   @Bean
-  public ViewResolver viewResolver() {
+  public ViewResolver viewResolver(PebbleEngine pebbleEngine) {
     PebbleViewResolver viewResolver = new PebbleViewResolver();
     viewResolver.setPrefix("com/mitchellbosecke/pebble/spring4/template/");
     viewResolver.setSuffix(".html");
-    viewResolver.setPebbleEngine(this.pebbleEngine());
+    viewResolver.setPebbleEngine(pebbleEngine);
     viewResolver.setContentType("text/html");
     viewResolver.setCharacterEncoding("UTF-8");
     return viewResolver;
