@@ -1,7 +1,10 @@
 package com.mitchellbosecke.pebble.spring4.extension.function;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.extension.Function;
 import com.mitchellbosecke.pebble.spring4.util.ViewUtils;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 import org.springframework.util.StringUtils;
 
@@ -23,21 +26,13 @@ public class HrefFunction implements Function {
   protected List<String> argumentNames;
   private String contextPath;
 
-  /**
-   * Constructor
-   */
   public HrefFunction() {
     this.argumentNames = new ArrayList<>();
     this.argumentNames.add(PARAM_URL);
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see com.mitchellbosecke.pebble.extension.Function#execute(java.util.Map)
-   */
   @Override
-  public Object execute(Map<String, Object> args) {
+  public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
     StringBuffer result = new StringBuffer();
 
     result.append(this.getContextPath());
@@ -61,11 +56,6 @@ public class HrefFunction implements Function {
     return this.contextPath;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see com.mitchellbosecke.pebble.extension.NamedArguments#getArgumentNames()
-   */
   @Override
   public List<String> getArgumentNames() {
     return this.argumentNames;

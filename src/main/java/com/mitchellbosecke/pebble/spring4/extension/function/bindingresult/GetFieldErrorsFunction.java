@@ -6,7 +6,9 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function.bindingresult;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
@@ -37,7 +39,7 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
   }
 
   @Override
-  public Object execute(Map<String, Object> args) {
+  public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
     String formName = (String) args.get(PARAM_FORM_NAME);
     String field = (String) args.get(PARAM_FIELD_NAME);
 
@@ -45,7 +47,6 @@ public class GetFieldErrorsFunction extends BaseBindingResultFunction {
       throw new IllegalArgumentException("Field parameter is required in GetFieldErrorsFunction");
     }
 
-    EvaluationContext context = (EvaluationContext) args.get("_context");
     Locale locale = context.getLocale();
     BindingResult bindingResult = this.getBindingResult(formName, context);
 

@@ -38,6 +38,6 @@ public abstract class BaseBindingResultFunction implements Function {
 
   protected BindingResult getBindingResult(String formName, EvaluationContext context) {
     String attribute = BindingResult.MODEL_KEY_PREFIX + formName;
-    return (BindingResult) context.getScopeChain().get(attribute);
+    return (BindingResult) context.getVariable(attribute);
   }
 }

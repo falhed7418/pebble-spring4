@@ -6,7 +6,9 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function.bindingresult;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 import org.springframework.validation.BindingResult;
 
@@ -29,11 +31,10 @@ public class HasFieldErrorsFunction extends BaseBindingResultFunction {
   }
 
   @Override
-  public Object execute(Map<String, Object> args) {
+  public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
     String formName = (String) args.get(PARAM_FORM_NAME);
     String fieldName = (String) args.get(PARAM_FIELD_NAME);
 
-    EvaluationContext context = (EvaluationContext) args.get("_context");
     BindingResult bindingResult = this.getBindingResult(formName, context);
 
     if (bindingResult != null) {

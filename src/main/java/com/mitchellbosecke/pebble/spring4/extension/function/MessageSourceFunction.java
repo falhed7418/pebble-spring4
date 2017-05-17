@@ -6,8 +6,10 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.extension.Function;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 import org.springframework.context.MessageSource;
 
@@ -35,17 +37,12 @@ public class MessageSourceFunction implements Function {
   }
 
   @Override
-  public Object execute(Map<String, Object> args) {
+  public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
     String key = this.extractKey(args);
     List<Object> arguments = this.extractArguments(args);
-    Locale locale = this.extractLocale(args);
+    Locale locale = context.getLocale();
 
     return this.messageSource.getMessage(key, arguments.toArray(), "???" + key + "???", locale);
-  }
-
-  private Locale extractLocale(Map<String, Object> args) {
-    EvaluationContext context = (EvaluationContext) args.get("_context");
-    return context.getLocale();
   }
 
   private String extractKey(Map<String, Object> args) {

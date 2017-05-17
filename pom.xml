@@ -19,10 +19,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <javasource>1.7</javasource>
-    <javatarget>1.7</javatarget>
+    <javasource>1.8</javasource>
+    <javatarget>1.8</javatarget>
 
-    <pebble.version>2.3.0</pebble.version>
+    <pebble.version>3.0.0-SNAPSHOT</pebble.version>
     <servlet-api.version>3.0.1</servlet-api.version>
     <spring-framework.version>4.1.0.RELEASE</spring-framework.version>
     <junit.version>4.12</junit.version>

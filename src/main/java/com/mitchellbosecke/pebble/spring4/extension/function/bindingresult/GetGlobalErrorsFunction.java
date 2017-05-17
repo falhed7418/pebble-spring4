@@ -6,7 +6,9 @@
  ******************************************************************************/
 package com.mitchellbosecke.pebble.spring4.extension.function.bindingresult;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
@@ -37,11 +39,10 @@ public class GetGlobalErrorsFunction extends BaseBindingResultFunction {
   }
 
   @Override
-  public Object execute(Map<String, Object> args) {
+  public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
     List<String> results = new ArrayList<>();
     String formName = (String) args.get(PARAM_FORM_NAME);
 
-    EvaluationContext context = (EvaluationContext) args.get("_context");
     Locale locale = context.getLocale();
     BindingResult bindingResult = this.getBindingResult(formName, context);
 
