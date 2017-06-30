@@ -46,7 +46,7 @@ public class PebbleView extends AbstractTemplateView {
    */
   private static final Logger TIMER_LOGGER = LoggerFactory.getLogger(PebbleView.class.getName() + ".timer");
 
-  private String characterEncoding;
+  private String characterEncoding = "UTF-8";
   private PebbleEngine pebbleEngine;
   private String templateName;
 

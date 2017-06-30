@@ -66,7 +66,6 @@ public class MVCConfig {
     viewResolver.setSuffix(".html");
     viewResolver.setPebbleEngine(pebbleEngine);
     viewResolver.setContentType("text/html");
-    viewResolver.setCharacterEncoding("UTF-8");
     return viewResolver;
   }
 }
