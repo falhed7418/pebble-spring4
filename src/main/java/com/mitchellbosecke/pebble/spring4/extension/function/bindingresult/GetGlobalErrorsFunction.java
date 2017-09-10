@@ -52,8 +52,7 @@ public class GetGlobalErrorsFunction extends BaseBindingResultFunction {
     List<String> errorMessages = new ArrayList<>();
     if (bindingResult != null) {
       for (ObjectError error : bindingResult.getGlobalErrors()) {
-        String msg = this.messageSource.getMessage(error.getCode(), error.getArguments(),
-                error.getDefaultMessage(), locale);
+        String msg = this.messageSource.getMessage(error, locale);
         errorMessages.add(msg);
       }
     }
